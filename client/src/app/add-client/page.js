@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label"
 export default function page() {
     return (
         <div className="flex justify-center items-center">
-            <Card className="lg:w-[50%] md:w-[60%] xl:w-[45%] p-[3vh] mt-[5vh]">
+            <Card className="lg:w-[50%] md:w-[60%] xl:w-[45%] p-[3vh] mt-[5vh] xsm:border-none xsm:p-[1vh]">
 
                 <CardHeader>
                     <CardTitle>Client Details</CardTitle>
