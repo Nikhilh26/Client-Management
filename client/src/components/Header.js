@@ -1,11 +1,9 @@
-'use client';
 import { UserButton } from '@clerk/nextjs';
-import { useAuth } from "@clerk/nextjs";
+import { auth } from '@clerk/nextjs/server';
 import Link from 'next/link';
 
 export default function Header() {
-    const { userId } = useAuth();
-
+    const { userId } = auth();
     return (
         <>
             <nav className='bg-blue-700 py-4 px-6 flex items-center justify-between mb-5'>

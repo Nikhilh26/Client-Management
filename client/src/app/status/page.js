@@ -1,8 +1,24 @@
 import { columns } from "./columns"
 import { DataTable } from './data-table'
+import { auth } from "@clerk/nextjs/server";
 
 async function getData() {
     // Fetch data from your API here.
+    const { getToken } = auth();
+    const token = await getToken();
+
+    try {
+        const response = await fetch('http://localhost:5000', {
+            method: 'POST',
+            headers: {
+                authorization: `Bearer ${token}`
+            }
+        });
+        const data = await response.json();
+        console.log(data);
+    } catch (error) {
+        console.log(error);
+    }
     return [
         {
             id: "728ed52f",
