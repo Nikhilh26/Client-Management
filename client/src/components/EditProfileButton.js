@@ -10,15 +10,31 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useAuth } from "@clerk/nextjs"
+import { useState } from "react"
 
-export default function EditProfileButton() {
+export default function EditProfileButton({ firstName, email, contact, lastName, id }) {
+    const { getToken } = useAuth();
+    const [newFirstName, setNewFirstName] = useState(firstName);
+    const [newLastName, setNewLastName] = useState(lastName);
+    const [newEmail, setNewEmail] = useState(email);
+    const [newContact, setNewContact] = useState(contact);
+    const [loading, setLoading] = useState(false);
+
+    const handleOnClickUpdate = (e) => {
+        e.preventDefault();
+    }
+    const handleOnClickDelete = (e) => {
+        e.preventDefault();
+    }
+
     return (
         <Dialog>
             <DialogTrigger asChild>
                 <Button variant="outline">Edit</Button>
             </DialogTrigger>
 
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className={`sm:max-w-[425px] ${loading ? 'pointer-events-none' : ''}`}>
 
                 <DialogHeader>
                     <DialogTitle>Edit profile</DialogTitle>
@@ -35,8 +51,9 @@ export default function EditProfileButton() {
                         </Label>
                         <Input
                             id="First-Name"
-                            defaultValue="Pedro Duarte"
                             className="col-span-3"
+                            value={newFirstName}
+                            onChange={(e) => setNewFirstName(e.target.value)}
                         />
                     </div>
 
@@ -46,8 +63,9 @@ export default function EditProfileButton() {
                         </Label>
                         <Input
                             id="Last-name"
-                            defaultValue="@peduarte"
                             className="col-span-3"
+                            value={newLastName}
+                            onChange={(e) => setNewLastName(e.target.value)}
                         />
                     </div>
 
@@ -57,8 +75,9 @@ export default function EditProfileButton() {
                         </Label>
                         <Input
                             id="Email"
-                            defaultValue="@peduarte"
                             className="col-span-3"
+                            value={newEmail}
+                            onChange={(e) => setNewEmail(e.target.value)}
                         />
                     </div>
 
@@ -68,19 +87,27 @@ export default function EditProfileButton() {
                         </Label>
                         <Input
                             id="Contact"
-                            defaultValue="@peduarte"
                             className="col-span-3"
+                            value={newContact}
+                            onChange={(e) => setNewContact(e.target.value)}
                         />
                     </div>
                 </div>
 
-                {/* Added Min width because approx between 600-800 width was random*/}
                 <DialogFooter>
-                    <Button className="min-w-[100%]" >Save changes</Button>
+                    <Button
+                        className="min-w-[100%]"
+                        onClick={handleOnClickUpdate}>
+                        Save changes
+                    </Button>
                 </DialogFooter>
 
                 <DialogFooter>
-                    <Button className="bg-red-600 hover:bg-red-800 min-w-[100%]">Delete</Button>
+                    <Button
+                        className="bg-red-600 hover:bg-red-800 min-w-[100%]"
+                        onClick={handleOnClickDelete}>
+                        Delete
+                    </Button>
                 </DialogFooter>
 
             </DialogContent>

@@ -1,11 +1,11 @@
 import EditProfileButton from "./EditProfileButton"
 import { Button } from "./ui/button"
 
-export default function UserCardComponent({ username, email, contact, id }) {
+export default function UserCardComponent({ firstName, lastName, email, contact, id, selected, setStatus }) {
     return (
-        <div className="card shadow-xl bg-gray-50 rounded-lg px-4 py-3 mb-3 w-[98%] ml-2">
+        <div className={`card shadow-xl ${selected ? 'bg-blue-200' : 'bg-gray-50'} rounded-lg px-4 py-3 mb-3 w-[98%] ml-2`}>
 
-            <h3 className="text-xl font-medium text-center mb-1">{username}</h3>
+            <h3 className="text-xl font-medium text-center mb-1">{firstName + " " + lastName}</h3>
             <div className="flex justify-between">
 
                 <div className="">
@@ -21,8 +21,20 @@ export default function UserCardComponent({ username, email, contact, id }) {
                 </div>
 
                 <div>
-                    <Button className="bg-white text-black mr-2 hover:bg-white-500">select</Button>
-                    <EditProfileButton />
+                    <Button
+                        className="bg-white text-black mr-2 hover:bg-white-500"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            setStatus(id)
+                        }}
+                    >select</Button>
+                    <EditProfileButton
+                        firstName={firstName}
+                        lastName={lastName}
+                        id={id}
+                        contact={contact}
+                        email={email}
+                    />
                 </div>
             </div>
 
