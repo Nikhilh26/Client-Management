@@ -11,8 +11,9 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useAuth } from "@clerk/nextjs"
+// import { useRouter } from 'next/navigation'
 import { useState } from "react"
-
+import { useCreateContext } from "@/app/page"
 export default function EditProfileButton({ firstName, email, contact, lastName, id }) {
     const { getToken } = useAuth();
     const [newFirstName, setNewFirstName] = useState(firstName);
@@ -20,12 +21,81 @@ export default function EditProfileButton({ firstName, email, contact, lastName,
     const [newEmail, setNewEmail] = useState(email);
     const [newContact, setNewContact] = useState(contact);
     const [loading, setLoading] = useState(false);
+    const updateClients = useCreateContext();
 
-    const handleOnClickUpdate = (e) => {
+    const handleOnClickUpdate = async (e) => {
         e.preventDefault();
+        const token = await getToken();
+        setLoading(true);
+        fetch(`http://localhost:5000/clients/${id}`, {
+            method: 'PUT',
+            headers: {
+                authorization: `Bearer ${token}`,
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: newEmail,
+                contact: newContact,
+                firstName: newFirstName,
+                lastName: newLastName
+            })
+        }).then((response) => {
+            if (response.ok) {
+                return response.json()
+            } else {
+                alert('Network Error');
+            }
+        }).then((data) => {
+            console.log(data);
+            if (typeof (data.success) === "undefined")
+                return alert('Something went wrong at server');
+
+            if (!data.success) {
+                if (data.message) alert(data.message);
+                else alert('Server Error');
+            } else {
+                updateClients(id, data.updatedClient, false);
+            }
+        }).finally(() => {
+
+            setLoading(false);
+            // router.push('/')
+        })
     }
-    const handleOnClickDelete = (e) => {
+
+    const handleOnClickDelete = async (e) => {
         e.preventDefault();
+        const token = await getToken();
+        setLoading(true);
+        fetch(`http://localhost:5000/clients/${id}`, {
+            method: 'DELETE',
+            headers: {
+                authorization: `Bearer ${token}`,
+                'Content-type': 'application/json'
+            },
+        }).then((response) => {
+            console.log(response.status);
+            if (response.ok) {
+                return response.json()
+            } else {
+                alert('Network Error');
+            }
+        }).then((data) => {
+            console.log(data);
+            if (typeof (data.success) === "undefined")
+                return alert('Something went wrong at server');
+
+            if (!data.success) {
+                if (data.message) alert(data.message);
+                else alert('Server Error');
+            } else {
+                updateClients(id, data.deletedClient, true);
+            }
+
+        }).finally(() => {
+            setLoading(false)
+            // router.push('/')
+        })
     }
 
     return (

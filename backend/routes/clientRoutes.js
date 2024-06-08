@@ -6,8 +6,8 @@ clientRouter.get('/', getAllClients);
 
 clientRouter.post('/', createClient);
 
-clientRouter.put('/', updateClientById);
+clientRouter.put('/:id', updateClientById);
 
-clientRouter.delete('/', deleteClientById);
+clientRouter.delete('/:id', deleteClientById);
 
 module.exports = clientRouter;

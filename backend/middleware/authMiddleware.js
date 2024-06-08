@@ -20,8 +20,8 @@ const validateToken = async (req, res, next) => {
                 message: "Stale/Invalid Tokens.LogIn Again"
             });
         }
-        console.log(req.body);
-        console.log(decoded);
+        // console.log(req.body);
+        // console.log(decoded);
         req.userId = decoded.sub;
         next();
     })

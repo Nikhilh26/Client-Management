@@ -27,7 +27,9 @@ export default function UserCardComponent({ firstName, lastName, email, contact,
                             e.preventDefault();
                             setStatus(id)
                         }}
-                    >select</Button>
+                    >
+                        {selected ? 'Deselect' : 'Select'}
+                    </Button>
                     <EditProfileButton
                         firstName={firstName}
                         lastName={lastName}

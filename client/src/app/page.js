@@ -1,13 +1,15 @@
 'use client' // optimize later
 import UserCardComponent from "@/components/UserCardComponent";
 import { useAuth } from "@clerk/nextjs"
-import { useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
+const CreateContext = createContext();
 
+export const useCreateContext = () => {
+  return useContext(CreateContext);
+}
 export default function Home() {
   const { userId, getToken } = useAuth();
   const [clients, setClients] = useState([]);
-  const [selectAll, setSelectAll] = useState(false);
-
   useEffect(() => {
     const getClients = async () => {
 
@@ -53,6 +55,25 @@ export default function Home() {
     setClients(new_Client);
   }
 
+  const updateClients = useCallback((id, newValue, isDeleted) => {
+    let new_Client;
+
+    if (isDeleted) {
+      new_Client = clients.filter((element) => element._id != id)
+    } else {
+      new_Client = clients.map((element) => {
+        if (id === element._id) {
+          return newValue;
+        } else {
+          return element
+        }
+      })
+
+    }
+
+    setClients(new_Client);
+  }, [clients]);
+
   return (
     <main className="w-[45%] lg:w-[55%] md:w-[60%] sm:w-[85%] sm:m-auto xsm:w-[94%] xsm:m-auto">
 
@@ -66,19 +87,21 @@ export default function Home() {
         <span className="ml-1">Select All</span>
       </div>
 
-      <div className="overflow-y-auto h-[80vh]">
-        {clients.map((ele, idx) =>
-          <UserCardComponent
-            firstName={ele.firstName}
-            lastName={ele.lastName}
-            key={ele._id}
-            email={ele.email}
-            contact={ele.contact}
-            id={ele._id}
-            selected={ele.selected}
-            setStatus={setStatus}
-          />)}
-      </div>
+      <CreateContext.Provider value={updateClients}>
+        <div className="overflow-y-auto h-[80vh]">
+          {clients.map((ele, idx) =>
+            <UserCardComponent
+              firstName={ele.firstName}
+              lastName={ele.lastName}
+              key={ele._id}
+              email={ele.email}
+              contact={ele.contact}
+              id={ele._id}
+              selected={ele.selected}
+              setStatus={setStatus}
+            />)}
+        </div>
+      </CreateContext.Provider>
 
     </main>
   );

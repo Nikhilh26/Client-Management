@@ -28,7 +28,7 @@ const updateClientById = async (req, res) => {
             { new: true }
         );
         if (!updatedClient) return res.status(404).json({ success: false, message: 'Client not found' });
-        res.status(200).json(updatedClient);
+        res.status(200).json({ updatedClient, success: true });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Server error' });
     }
@@ -36,9 +36,10 @@ const updateClientById = async (req, res) => {
 
 const deleteClientById = async (req, res) => {
     try {
+        // console.log(req.params.id);
         const deletedClient = await Client.findOneAndDelete({ _id: req.params.id, userId: req.userId });
         if (!deletedClient) return res.status(404).json({ success: false, message: 'Client not found' });
-        res.status(200).json({ success: true, message: 'Client deleted' });
+        res.status(200).json({ success: true, message: 'Client deleted', deletedClient });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Server error' });
     }
