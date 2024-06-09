@@ -16,7 +16,7 @@ const sendSurveyEmail = async (req, res) => {
         sendSmtpEmail.params = { "parameter": "My param value", "subject": "New Subject" };
 
         apiInstance.sendTransacEmail(sendSmtpEmail).then(function (data) {
-            console.log('API called successfully. Returned data: ' + JSON.stringify(data));
+            // console.log('API called successfully. Returned data: ' + JSON.stringify(data));
 
         }, function (error) {
             console.error(error);
