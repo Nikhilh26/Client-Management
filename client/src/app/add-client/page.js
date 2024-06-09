@@ -47,6 +47,13 @@ export default function page() {
                 alert('Network Response not ok!');
 
         }).then((data) => {
+            if (typeof (data.message) !== "string" && typeof (data.success) !== "boolean") {
+                alert('Server Error');
+            }
+            if (!data.success) {
+                console.log(data);
+                alert(data.message);
+            }
             console.log(data);
             setContactNo('');
             setEmail('');

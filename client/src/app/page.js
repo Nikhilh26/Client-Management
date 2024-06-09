@@ -25,9 +25,18 @@ export default function Home() {
             authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           }
-        }).then((response) => response.json()).then((data) => {
+        }).then((response) => {
+          if (response.ok)
+            return response.json();
+          else
+            alert('Network not ok')
+        }).then((data) => {
+          if (!data.success) {
+            alert(data.message);
+            return;
+          }
           const clientTemp = data.map(element => ({ ...element, selected: false }));
-          // console.log(clientTemp);
+
           setClients(clientTemp);
         })
 
