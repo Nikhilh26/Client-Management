@@ -1,10 +1,14 @@
-const Client = require('../db/models');
+const { Client } = require('../db/models');
 
 const getAllClients = async (req, res) => {
     try {
         const clients = await Client.find({ userId: req.userId });
-        res.status(200).json(clients);
+        res.status(200).json({
+            success: true,
+            clients
+        });
     } catch (error) {
+        console.log(error);
         res.status(500).json({ success: false, message: 'Server error' });
     }
 };
@@ -13,7 +17,11 @@ const createClient = async (req, res) => {
     try {
         const newClient = new Client({ ...req.body, userId: req.userId });
         const savedClient = await newClient.save();
-        res.status(201).json(savedClient);
+        res.status(201).json({
+            success: true,
+            message: 'Client added successfully',
+            savedClient
+        });
     } catch (error) {
         console.log(error);
         res.status(500).json({ success: false, message: 'Server error' });

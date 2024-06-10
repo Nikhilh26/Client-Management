@@ -47,12 +47,17 @@ export default function page() {
                 alert('Network Response not ok!');
 
         }).then((data) => {
+            console.log(typeof (data.message));
+            console.log(typeof (data.success));
+
             if (typeof (data.message) !== "string" && typeof (data.success) !== "boolean") {
                 alert('Server Error');
+                return;
             }
             if (!data.success) {
                 console.log(data);
                 alert(data.message);
+                return;
             }
             console.log(data);
             setContactNo('');

@@ -13,7 +13,8 @@ import { Label } from "@/components/ui/label"
 import { useAuth } from "@clerk/nextjs"
 // import { useRouter } from 'next/navigation'
 import { useState } from "react"
-import { useCreateContext } from "@/app/page"
+import { useCreateContext } from "@/app/page";
+
 export default function EditProfileButton({ firstName, email, contact, lastName, id }) {
     const { getToken } = useAuth();
     const [newFirstName, setNewFirstName] = useState(firstName);

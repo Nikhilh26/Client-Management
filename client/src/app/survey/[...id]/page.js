@@ -1,42 +1,32 @@
 'use client'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import '@/../survey-core/defaultV2.min.css'
 import { Model } from 'survey-core';
 import { Survey } from 'survey-react-ui';
 import * as SurveyTheme from "survey-core/themes";
+import { surveyJSON, responseMapping } from './survey-questions';
 
-const surveyJson = {
-    elements: [{
-        name: "FirstName",
-        title: "Enter your first name:",
-        type: "text"
-    }, {
-        name: "LastName",
-        title: "Enter your last name:",
-        type: "text"
-    }, {
-        name: "favoriteColor",
-        type: "radiogroup",
-        title: "What is your favorite color?",
-        choices: [
-            "Red",
-            "Green",
-            "Blue",
-            "Yellow"
-        ]
-    }]
-};
-
-export default function page({ params }) {
+export default function survey({ params }) {
     const [showTYPage, setShowTYPage] = useState(false);
-    console.log(params.id[0]);
-    const survey = new Model(surveyJson);
-    survey.applyTheme(SurveyTheme.BorderlessLight);
+    const survey = new Model(surveyJSON);
+
+    useEffect(() => {
+        survey.applyTheme(SurveyTheme.BorderlessLight);
+    }, [survey]);
+
+    console.log(params.id[0])
 
     const surveyComplete = useCallback((survey) => {
-        const userId = 1;
-        survey.setValue("userId", userId);
-        console.log(survey.data)
+        // const userId = 1;
+        // survey.setValue("userId", userId);
+        const numericResponses = {};
+
+        Object.keys(survey.data).forEach((question, index) => {
+            numericResponses[index] = responseMapping[survey.data[question]];
+        });
+
+        console.log(numericResponses);
+        setShowTYPage(true);
         setShowTYPage(true);
     }, []);
 

@@ -5,7 +5,6 @@ const connectDB = require("./db/config.js");
 const dotenv = require("dotenv");
 const clientRouter = require("./routes/clientRoutes.js");
 const emailRouter = require('./routes/emailRoutes.js');
-const { sendSurveyEmail } = require('./controllers/emailContollers.js');
 
 dotenv.config();
 
@@ -21,7 +20,6 @@ app.use(morgan('dev'));
 app.use('/clients', clientRouter);
 app.use('/email', emailRouter);
 
-app.get('/test-route', sendSurveyEmail);
 // PORT activation
 const PORT = process.env.PORT;
 app.listen(PORT, (port, err) => {
