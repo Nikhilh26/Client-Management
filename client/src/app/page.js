@@ -4,8 +4,34 @@ import { useAuth } from "@clerk/nextjs"
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { LoadingSpinner } from "@/components/loader";
 import { Button } from "@/components/ui/button";
+import React from 'react';
+import {
+  Radar, RadarChart, PolarGrid,
+  PolarAngleAxis, PolarRadiusAxis
+} from 'recharts';
 
 const CreateContext = createContext();
+
+function getScreenSize() {
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+
+  if (width >= 300 && width < 476) {
+    return 340;
+  } else if (width >= 476 && width < 768) {
+    return 350;
+  } else if (width >= 768 && width < 1024) {
+    return 350;
+  } else if (width >= 1024 && width < 1279) {
+    return 380;
+  } else if (width >= 1280 && width < 1536) {
+    return 600;
+  } else if (width >= 1536) {
+    return 600;
+  } else {
+    return 'unknown';
+  }
+}
 
 export const useCreateContext = () => {
   return useContext(CreateContext);
@@ -94,6 +120,13 @@ export default function Home() {
 
     setClients(new_Client);
   }, [clients]);
+  const data = [
+    { name: 'A', x: [1, 2, 3, 4] },
+    { name: 'B', x: [22] },
+    { name: 'C', x: [-32] },
+    { name: 'D', x: [-14] },
+    { name: 'E', x: [-51] },
+  ];
 
   return (
     <>
@@ -103,9 +136,9 @@ export default function Home() {
             <LoadingSpinner />
           </div>
           :
-          (<main className="w-[45%] lg:w-[55%] md:w-[60%] sm:w-[90%] sm:m-auto xsm:w-[96%] xsm:m-auto">
+          (<main className="flex flex-row flex-wrap">
 
-            <div>
+            <div className="w-[45%] lg:w-[55%] md:w-[60%] sm:w-[90%] sm:m-auto xsm:w-[96%] xsm:m-auto ">
               <h1 className="text-3xl font-bold text-center">Clients</h1>
 
               <div className="flex flex-row justify-between">
@@ -122,7 +155,7 @@ export default function Home() {
               </div>
 
               <CreateContext.Provider value={updateClients}>
-                <div className="overflow-y-auto h-[80vh]">
+                <div className="overflow-y-auto h-[75vh] overflow-y-none">
                   {clients.map((ele, idx) =>
                     <UserCardComponent
                       firstName={ele.firstName}
@@ -138,6 +171,18 @@ export default function Home() {
               </CreateContext.Provider>
 
             </div>
+
+            <div className="flex justify-center items-center grow">
+              <RadarChart height={getScreenSize()} width={getScreenSize()}
+                outerRadius="80%" data={data}>
+                <PolarGrid />
+                <PolarAngleAxis dataKey="name" />
+                <PolarRadiusAxis />
+                <Radar dataKey="x" stroke="green"
+                  fill="green" fillOpacity={0.5} />
+              </RadarChart>
+            </div>
+
           </main>
           )
       }

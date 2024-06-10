@@ -21,6 +21,7 @@
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18",
+    "recharts": "^2.12.7",
     "survey-core": "^1.10.6",
     "survey-react-ui": "^1.10.6",
     "tailwind-merge": "^2.3.0",
