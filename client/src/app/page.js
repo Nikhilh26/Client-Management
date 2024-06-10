@@ -14,24 +14,23 @@ const CreateContext = createContext();
 
 function getScreenSize() {
 
-  // const width = window.innerWidth;
-  // const height = window.innerHeight;
-  return 500;
-  // if (width >= 300 && width < 476) {
-  //   return 340;
-  // } else if (width >= 476 && width < 768) {
-  //   return 350;
-  // } else if (width >= 768 && width < 1024) {
-  //   return 350;
-  // } else if (width >= 1024 && width < 1279) {
-  //   return 380;
-  // } else if (width >= 1280 && width < 1536) {
-  //   return 600;
-  // } else if (width >= 1536) {
-  //   return 600;
-  // } else {
-  //   return 'unknown';
-  // }
+  if (typeof (window) === "undefined") return 0;
+  const width = window.innerWidth;
+  if (width >= 300 && width < 476) {
+    return 340;
+  } else if (width >= 476 && width < 768) {
+    return 350;
+  } else if (width >= 768 && width < 1024) {
+    return 350;
+  } else if (width >= 1024 && width < 1279) {
+    return 380;
+  } else if (width >= 1280 && width < 1536) {
+    return 600;
+  } else if (width >= 1536) {
+    return 600;
+  } else {
+    return 'unknown';
+  }
 }
 
 export const useCreateContext = () => {
