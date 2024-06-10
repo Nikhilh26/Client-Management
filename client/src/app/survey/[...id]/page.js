@@ -6,7 +6,7 @@ import { Survey } from 'survey-react-ui';
 import * as SurveyTheme from "survey-core/themes";
 import { surveyJSON, responseMapping } from './survey-questions';
 
-export default function survey({ params }) {
+export default function Survey({ params }) {
     const [showTYPage, setShowTYPage] = useState(false);
     const survey = new Model(surveyJSON);
 

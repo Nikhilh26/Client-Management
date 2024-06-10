@@ -14,7 +14,7 @@ import { useState } from "react"
 import { useRouter } from 'next/navigation'
 import { useAuth } from "@clerk/nextjs"
 
-export default function page() {
+export default function Page() {
     const [fName, setFName] = useState('');
     const [lName, setLName] = useState('');
     const [email, setEmail] = useState('');
