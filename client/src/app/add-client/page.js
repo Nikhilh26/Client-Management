@@ -28,7 +28,7 @@ export default function page() {
         const token = await getToken();
         setLoading(true);
 
-        fetch('http://localhost:5000/clients', {
+        fetch('https://client-management-zz6h.onrender.com/clients', {
             method: 'POST',
             headers: {
                 authorization: `Bearer ${token}`,

@@ -52,7 +52,7 @@ export default function Home() {
         setLoading(true);
         const token = await getToken();
         // alert(token);
-        fetch('http://localhost:5000/clients', {
+        fetch('https://client-management-zz6h.onrender.com/clients', {
           headers: {
             authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
