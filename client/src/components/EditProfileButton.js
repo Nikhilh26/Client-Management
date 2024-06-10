@@ -110,7 +110,7 @@ export default function EditProfileButton({ firstName, email, contact, lastName,
                 <DialogHeader>
                     <DialogTitle>Edit profile</DialogTitle>
                     <DialogDescription>
-                        Make changes to the profile here. Click save when you're done or click delete to remove.
+                        Make changes to the profile here. Click save when you&apos;re done or click delete to remove.
                     </DialogDescription>
                 </DialogHeader>
 

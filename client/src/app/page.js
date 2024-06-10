@@ -85,6 +85,7 @@ export default function Home() {
     }
 
     getClients();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const setStatus = (clientId, selectAll) => {
