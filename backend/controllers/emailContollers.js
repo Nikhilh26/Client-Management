@@ -1,5 +1,11 @@
 const sendSurveyEmail = async (req, res) => {
+    try {
+        console.log(req.userId);
+    } catch (error) {
 
+    }
+
+    // send email logic
 }
 
 const handleEmailResponse = async (req, res) => {

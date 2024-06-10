@@ -3,6 +3,7 @@ import UserCardComponent from "@/components/UserCardComponent";
 import { useAuth } from "@clerk/nextjs"
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { LoadingSpinner } from "@/components/loader";
+import { Button } from "@/components/ui/button";
 
 const CreateContext = createContext();
 
@@ -24,7 +25,7 @@ export default function Home() {
       try {
         setLoading(true);
         const token = await getToken();
-        // console.log(token);
+        // alert(token);
         fetch('http://localhost:5000/clients', {
           headers: {
             authorization: `Bearer ${token}`,
@@ -48,6 +49,7 @@ export default function Home() {
         }).catch((err) => {
           alert('Server seems Down contact owner');
           console.log(err);
+
         })
 
       } catch (error) {
@@ -101,35 +103,43 @@ export default function Home() {
             <LoadingSpinner />
           </div>
           :
-          (<main className="w-[45%] lg:w-[55%] md:w-[60%] sm:w-[85%] sm:m-auto xsm:w-[94%] xsm:m-auto">
+          (<main className="w-[45%] lg:w-[55%] md:w-[60%] sm:w-[90%] sm:m-auto xsm:w-[96%] xsm:m-auto">
 
-            <h1 className="text-3xl font-bold text-center">Clients</h1>
+            <div>
+              <h1 className="text-3xl font-bold text-center">Clients</h1>
 
-            <div className="ml-2">
-              <input type="checkbox"
-                onChange={(event) => {
-                  setStatus('', event.target.checked);
-                }} />
-              <span className="ml-1">Select All</span>
-            </div>
+              <div className="flex flex-row justify-between">
+                <div>
+                  <input type="checkbox"
+                    className="ml-2"
+                    onChange={(event) => {
+                      setStatus('', event.target.checked);
+                    }} />
+                  <span className="ml-1">Select All</span>
+                </div>
 
-            <CreateContext.Provider value={updateClients}>
-              <div className="overflow-y-auto h-[80vh]">
-                {clients.map((ele, idx) =>
-                  <UserCardComponent
-                    firstName={ele.firstName}
-                    lastName={ele.lastName}
-                    key={ele._id}
-                    email={ele.email}
-                    contact={ele.contact}
-                    id={ele._id}
-                    selected={ele.selected}
-                    setStatus={setStatus}
-                  />)}
+                <Button className="bg-blue-500 p-2 mr-2 mb-1">Send Email</Button>
               </div>
-            </CreateContext.Provider>
 
-          </main>)
+              <CreateContext.Provider value={updateClients}>
+                <div className="overflow-y-auto h-[80vh]">
+                  {clients.map((ele, idx) =>
+                    <UserCardComponent
+                      firstName={ele.firstName}
+                      lastName={ele.lastName}
+                      key={ele._id}
+                      email={ele.email}
+                      contact={ele.contact}
+                      id={ele._id}
+                      selected={ele.selected}
+                      setStatus={setStatus}
+                    />)}
+                </div>
+              </CreateContext.Provider>
+
+            </div>
+          </main>
+          )
       }
     </>
   );

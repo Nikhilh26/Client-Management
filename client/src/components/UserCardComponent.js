@@ -3,15 +3,15 @@ import { Button } from "./ui/button"
 
 export default function UserCardComponent({ firstName, lastName, email, contact, id, selected, setStatus }) {
     return (
-        <div className={`card shadow-xl ${selected ? 'bg-blue-200' : 'bg-gray-50'} rounded-lg px-4 py-3 mb-3 w-[98%] ml-2`}>
+        <div className={`card shadow-xl ${selected ? 'bg-blue-200' : 'bg-gray-50'} rounded-lg px-2 py-3 mb-3 w-[99%] ml-2 text-sm xsm:text-xsm`}>
 
             <h3 className="text-xl font-medium text-center mb-1">{firstName + " " + lastName}</h3>
-            <div className="flex justify-between">
+            <div className="flex justify-between flex-wrap">
 
-                <div className="">
+                <div className="text-center">
                     <p className="text-gray-600 text-md mb-1 flex items-center">
                         <span className="mr-2 font-bold">Email:</span>
-                        <span className="text-blue-500">{email}</span>
+                        <span className="text-blue-500 break-words">{email}</span>
                     </p>
 
                     <p className="text-gray-600 text-md flex items-center">
@@ -38,6 +38,7 @@ export default function UserCardComponent({ firstName, lastName, email, contact,
                         email={email}
                     />
                 </div>
+
             </div>
 
         </div>

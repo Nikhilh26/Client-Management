@@ -11,7 +11,7 @@ export default function Header() {
                 <div className='flex items-center'>
                     <Link href='/'>
                         <div className='text-lg font-bold text-white'>
-                            Client Management
+                            App
                         </div>
                     </Link>
                 </div>
