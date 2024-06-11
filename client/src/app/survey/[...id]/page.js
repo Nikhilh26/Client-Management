@@ -9,7 +9,7 @@ import { LoadingSpinner } from '@/components/loader';
 
 export default function SurveyComponent({ params }) {
     const [showTYPage, setShowTYPage] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const [repondedBefore, setRespondedBefore] = useState(false);
     const survey = new Model(surveyJSON);
@@ -35,7 +35,8 @@ export default function SurveyComponent({ params }) {
             }).finally(() => {
                 setLoading(false);
             })
-    })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     useEffect(() => {
         survey.applyTheme(SurveyTheme.BorderlessLight);
@@ -79,7 +80,7 @@ export default function SurveyComponent({ params }) {
             responses: numericResponses
         }
 
-        saveSurveyResults(`https://client-management-zz6h.onrender.com/email/submit${params.id[0]}`, json);
+        saveSurveyResults(`https://client-management-zz6h.onrender.com/email/submit/${params.id[0]}`, json);
     }, []);
 
     survey.onComplete.add(surveyComplete);
