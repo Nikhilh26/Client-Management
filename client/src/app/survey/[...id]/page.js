@@ -16,7 +16,7 @@ export default function SurveyComponent({ params }) {
 
     useEffect(() => {
         setLoading(true);
-        fetch(`https://client-management-zz6h.onrender.com/${params.id[0]}`)
+        fetch(`https://client-management-zz6h.onrender.com/email/responded/${params.id[0]}`)
             .then((response) => {
                 if (response.ok) {
                     return response.json()
@@ -79,7 +79,7 @@ export default function SurveyComponent({ params }) {
             responses: numericResponses
         }
 
-        saveSurveyResults(`https://client-management-zz6h.onrender.com/${params.id[0]}`, json);
+        saveSurveyResults(`https://client-management-zz6h.onrender.com/email/submit${params.id[0]}`, json);
     }, []);
 
     survey.onComplete.add(surveyComplete);
