@@ -18,7 +18,6 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 
-let timer = 1718094655;
 
 app.use('/clients', clientRouter);
 app.use('/email', emailRouter);
@@ -28,70 +27,25 @@ app.listen(PORT, (port, err) => {
     console.log("Server Live ", PORT);
 })
 
-// app.use('/test', async (req, res) => {
+
+// app.get('/test', async (req, res) => {
 //     try {
-//         const unrepliedEmails = await Email.find({ replied: false, userId: 'user_2hP5Ah7m4Sb2UJVJgoWfxDxJR8i' });
+//         const emails = await Email.find({ deliveryStatus: "sent" });
 
-//         const getMaxField = await Email.aggregate([
-//             {
-//                 $match: {
-//                     userId: 'user_2hP5Ah7m4Sb2UJVJgoWfxDxJR8i'
-//                 }
-//             }, {
-//                 $group: {
-//                     _id: null,
-//                     maxSentAt: { $max: "$sentAt" }
-//                 }
-//             }
-//         ])
-//         const maxValue = getMaxField[0].maxSentAt;
-//         const recentEmails = await Email.aggregate([
-//             {
-//                 $match: {
-//                     userId: 'user_2hP5Ah7m4Sb2UJVJgoWfxDxJR8i',
-//                     sentAt: maxValue
-//                 }
-//             }
-//         ])
+//         await Promise.all(emails.map(async (element) => {
+//             element.deliveryStatus = "delivered"
+//             await element.save()
+//         }))
 
-//         console.log(recentEmails);
-//         const combinedEmails = [...unrepliedEmails, ...recentEmails];
-
-//         const uniqueEmailsMap = new Map();
-
-//         combinedEmails.forEach(email => {
-//             const id = email._id.toString()
-//             if (!uniqueEmailsMap.has(email._id.toString())) {
-//                 uniqueEmailsMap.set(email._id.toString(), email);
-//             }
-//         });
-
-//         const uniqueEmails = Array.from(uniqueEmailsMap.values());
-
-//         res.status(200).json({
-//             success: true,
-//             uniqueEmails
-//         });
+//         console.log('All documents updated successfully');
+//         return res.status(200).json({
+//             success: true
+//         })
 //     } catch (error) {
-//         console.log(error)
-//         return res.json({
+//         console.error('Error updating documents:', error);
+//         return res.status(501).json({
 //             success: false
 //         })
 //     }
-// })
 
-// app.get('/', async (req, res) => {
-//     const response = await Email.insertMany([
-//         {
-//             userId: 'user_2hP5Ah7m4Sb2UJVJgoWfxDxJR8i',
-//             sentAt: timer,
-//             replied: false,
-//             clientId: '666418de6c9451a9ff5144a8'
-//         }
-//     ])
-//     // const response = await Email.updateMany({ clientId: '666729b2e717dcf8fdb8f581' }, { $set: { replied: true, responses: [0, 1, 2, 3, 3, 3, 3, 1, 4, 2, 0, 0, 4, 4, 1] } })
-//     // const response = await Email.deleteMany({ clientId: '666729b2e717dcf8fdb8f581' });
-//     return res.json({
-//         response
-//     })
 // })

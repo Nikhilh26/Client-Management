@@ -6,10 +6,11 @@ const emailRouter = express.Router();
 emailRouter.post('/submit/:submissionId', handleEmailResponse); // handled
 emailRouter.get('/responded/:submissionId', hasResponded); // handled
 
+
 emailRouter.use(validateToken);
 // Protected Routes
-emailRouter.post('/', sendSurveyEmail);
 emailRouter.get('/status', getSurveyStatus);
+emailRouter.post('/', sendSurveyEmail);
 // emailRouter.get('/', getLatestSurveyData); to be include with get data
 
 module.exports = emailRouter;

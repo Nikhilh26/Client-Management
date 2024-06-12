@@ -1,13 +1,10 @@
 "use client"
-import { useState } from "react"
 
 import {
     flexRender,
     getCoreRowModel,
     useReactTable,
     getPaginationRowModel,
-    ColumnFiltersState,
-    getFilteredRowModel,
 } from "@tanstack/react-table"
 
 import {
@@ -20,36 +17,17 @@ import {
 } from "@/components/ui/table"
 
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 
 export function DataTable({ columns, data }) {
-    const [columnFilters, setColumnFilters] = useState([]);
-
     const table = useReactTable({
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
-        onColumnFiltersChange: setColumnFilters,
-        getFilteredRowModel: getFilteredRowModel(),
-        state: {
-            columnFilters,
-        },
     })
 
     return (
         <div>
-            <div className="flex items-center py-4">
-                <Input
-                    placeholder="Filter emails..."
-                    value={(table.getColumn("email")?.getFilterValue()) ?? ""}
-                    onChange={(event) =>
-                        table.getColumn("email")?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm"
-                />
-            </div>
-            {/* {rounded-md border} */}
             <div className="">
 
                 <Table className="w-[100%]">

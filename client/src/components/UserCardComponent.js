@@ -6,7 +6,7 @@ export default function UserCardComponent({ firstName, lastName, email, contact,
         <div className={`card shadow-xl ${selected ? 'bg-blue-200' : 'bg-gray-50'} rounded-lg px-2 py-3 mb-3 w-[99%] ml-2 text-sm xsm:text-xsm`}>
 
             <h3 className="text-xl font-medium text-center mb-1">{firstName + " " + lastName}</h3>
-            <div className="flex justify-between flex-wrap">
+            <div className="flex justify-between flex-wrap xxsm:flex-col xxsm:tems-center">
 
                 <div className="text-center">
                     <p className="text-gray-600 text-md mb-1 flex items-center">
@@ -20,7 +20,7 @@ export default function UserCardComponent({ firstName, lastName, email, contact,
                     </p>
                 </div>
 
-                <div>
+                <div className="xxsm:w-[100%] xxsm:text-center">
                     <Button
                         className="bg-white text-black mr-2 hover:bg-white-500"
                         onClick={(e) => {

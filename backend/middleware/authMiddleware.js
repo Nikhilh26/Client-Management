@@ -27,7 +27,7 @@ const validateToken = async (req, res, next) => {
             next();
         })
     } catch (error) {
-        return res.json({
+        return res.status(401).json({
             sucess: false,
             message: 'something went wrong while parsing token'
         })
