@@ -21,7 +21,7 @@ export default function Page() {
     const [contactNo, setContactNo] = useState('');
     const [loading, setLoading] = useState(false);
     const router = useRouter();
-    const { getToken } = useAuth();
+    const { getToken, userId } = useAuth();
 
     const handleOnSubmit = async () => {
         if (!userId) {

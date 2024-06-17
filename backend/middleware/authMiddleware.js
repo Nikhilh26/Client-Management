@@ -22,7 +22,7 @@ const validateToken = async (req, res, next) => {
                 });
             }
             // console.log(req.body);
-            // console.log(decoded);
+            console.log(decoded);
             req.userId = decoded.sub;
             next();
         })

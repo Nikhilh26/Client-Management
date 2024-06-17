@@ -1,4 +1,4 @@
-const { Email } = require("../db/models");
+const { Email, Client } = require("../db/models");
 
 const sendSurveyEmail = async (req, res) => {
     try {
@@ -132,13 +132,10 @@ const getSurveyStatus = async (req, res) => {
         ])
         // to be extracted to another method
         const combinedEmails = [...unrepliedEmails, ...recentEmails];
-        // console.log(unrepliedEmails);
-        // console.log(recentEmails);
         const uniqueEmailsMap = new Map();
 
         combinedEmails.forEach(email => {
             if (!uniqueEmailsMap.has(email._id.toString())) {
-                // console.log(email);
                 uniqueEmailsMap.set(email._id.toString(), email);
             }
         });
@@ -150,7 +147,7 @@ const getSurveyStatus = async (req, res) => {
             const id = value._id.toString();
             const status = value.replied ? "Responded" : "Has not responded";
 
-            Sent = Sent + " on " + time;
+            Sent = Sent + " on " + (new Date(time)).toLocaleString();
 
             if (value.clientId && typeof (value.clientId.email) !== "undefined") {
                 respPayload.push({ Sent, email: value.clientId.email, id, status })
@@ -173,9 +170,56 @@ const getSurveyStatus = async (req, res) => {
     }
 }
 
+function sumGroupsOfThree(arr) {
+    if (arr.length !== 15) {
+        throw new Error('Array length must be 15');
+    }
+
+    let sums = [];
+    for (let i = 0; i < arr.length; i += 3) {
+        let sum = arr[i] + arr[i + 1] + arr[i + 2];
+        sums.push(sum);
+    }
+    return sums;
+}
+
 const getLatestSurveyData = async (req, res) => {
-    // for calculation -> use aggregation pipeline from above and then calculate
-} // repsonse will be used for representation
+    try {
+        const clientId = req.params.clientEmailId;
+        const userId = req.userId;
+        console.log(clientId);
+        // latest responded
+        const recentResponse = await Email.find({ clientId, userId, replied: true }).sort({ sentAt: -1 }).limit(1);
+        const recentEmail = await Email.find({ clientId, userId }).sort({ sentAt: -1 }).limit(1);
+        const clientInfo = await Client.findById(clientId);
+
+        if (recentResponse.length < 1 || recentEmail.length < 1)
+            return res.status(405).json({
+                success: true,
+                message: 'No Entry found'
+            })
+
+        let respPayload = {};
+        let temp = recentResponse[0].updatedAt?.toLocaleString();
+        if (typeof (temp) === "undefined") temp = (new Date()).toLocaleString()
+        respPayload['responses'] = sumGroupsOfThree(recentResponse[0].responses);
+        respPayload['lastReplied'] = temp;
+        respPayload['lastSent'] = (new Date(recentEmail[0].sentAt * 1000)).toLocaleString();
+        respPayload['emailId'] = clientInfo.email;
+        respPayload['contactNumber'] = clientInfo.contact;
+        // console.log(respPayload);
+        return res.status(200).json({
+            respPayload,
+            success: true
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(501).json({
+            success: false,
+            message: 'Server Error'
+        })
+    }
+}
 
 const hasResponded = async (req, res) => {
     try {
