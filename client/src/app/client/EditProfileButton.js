@@ -69,7 +69,7 @@ export default function EditProfileButton({ firstName, email, contact, lastName,
         e.preventDefault();
         const token = await getToken();
         setLoading(true);
-        fetch(`http://localhost:5000/clients/${id}`, {
+        fetch(`https://client-management-zz6h.onrender.com/clients/${id}`, {
             method: 'DELETE',
             headers: {
                 authorization: `Bearer ${token}`,

@@ -8,7 +8,7 @@ async function getData() {
     const token = await getToken();
     try {
 
-        const response = await fetch('http://localhost:5000/email/status', {
+        const response = await fetch('https://client-management-zz6h.onrender.com/email/status', {
             headers: {
                 authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json',

@@ -114,7 +114,7 @@ export default function Home() {
         let data = clients.filter((ele) => ele.selected);
         setDisabled(true);
         // console.log(data);
-        fetch('http://localhost:5000/email', {
+        fetch('https://client-management-zz6h.onrender.com/email', {
             method: 'POST',
             body: JSON.stringify({
                 data
