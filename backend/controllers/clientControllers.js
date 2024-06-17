@@ -1,4 +1,4 @@
-const { Client } = require('../db/models');
+const { Client, Email } = require('../db/models');
 
 const getAllClients = async (req, res) => {
     try {
@@ -44,12 +44,17 @@ const updateClientById = async (req, res) => {
 
 const deleteClientById = async (req, res) => {
     try {
-        // console.log(req.params.id);
         const deletedClient = await Client.findOneAndDelete({ _id: req.params.id, userId: req.userId });
         if (!deletedClient) return res.status(404).json({ success: false, message: 'Client not found' });
-        res.status(200).json({ success: true, message: 'Client deleted', deletedClient });
+        const emailId = deletedClient.email;
+
+        await Email.updateMany({ clientId: req.params.id }, {
+            $set: { email: emailId }
+        });
+
+        return res.status(200).json({ success: true, message: 'Client deleted', deletedClient });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Server error' });
+        return res.status(500).json({ success: false, message: 'Server error' });
     }
 };
 

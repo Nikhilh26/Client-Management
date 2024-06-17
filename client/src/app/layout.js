@@ -2,6 +2,7 @@ import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { headers } from "next/headers";
 import Header from "@/components/Header";
+import HomePage from "@/components/HomePage";
 import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
@@ -11,14 +12,15 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  const url = headers().get('x-url'); // this header we set in middleware -> its pirpose is to not load header on survey page
+
+  const isSurveyPage = headers().get('survey-page'); // null or true
 
   return (
     <>
       <ClerkProvider>
         <html lang="en">
           <body className={inter.className}>
-            {url ? <></> : <Header />}
+            {isSurveyPage ? <></> : <Header />}
             <main>
               {children}
             </main>

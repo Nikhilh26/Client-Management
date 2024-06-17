@@ -1,194 +1,67 @@
-'use client' // optimize later
-import UserCardComponent from "@/components/UserCardComponent";
-import { useAuth } from "@clerk/nextjs"
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import { LoadingSpinner } from "@/components/loader";
-import { Button } from "@/components/ui/button";
-
-import dynamic from 'next/dynamic'
-const RadarChartComponent = dynamic(() => import('../components/RadarChartComponent'), { ssr: false })
-
-const CreateContext = createContext();
-
-export const useCreateContext = () => {
-  return useContext(CreateContext);
-}
-export default function Home() {
-  const { userId, getToken } = useAuth();
-  const [clients, setClients] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [disabled, setDisabled] = useState(false);
-
-  useEffect(() => {
-    const getClients = async () => {
-
-      if (!userId) {
-        return new Response("Unauthorized", { status: 401 });
-      }
-
-      try {
-        setLoading(true);
-        const token = await getToken();
-        // alert(token);
-        fetch('https://client-management-zz6h.onrender.com/clients', {
-          headers: {
-            authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          }
-        }).then((response) => {
-          if (response.ok)
-            return response.json();
-          else {
-            console.log('Network Error');
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-        }).then((data) => {
-          if (!data.success) {
-            alert(data.message);
-            return;
-          }
-          const clientTemp = data.clients.map(element => ({ ...element, selected: false }));
-          setClients(clientTemp);
-          setLoading(false);
-        }).catch((err) => {
-          if (err.name === 'AbortError') {
-            // Request was aborted due to page refresh
-            console.log('Request aborted due to page refresh');
-          } else {
-            // Handle other types of errors
-            alert('An error occurred while fetching data');
-            console.error(err);
-          }
-        })
-      } catch (error) {
-        console.log(error);
-        alert('Something went wrong');
-      }
-    }
-
-    getClients();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const setStatus = useCallback((clientId, selectAll) => {
-
-    const new_Client = clients.map((ele) => {
-      if (typeof (selectAll) === "boolean") {
-        return ({ ...ele, selected: (selectAll) });
-      } else if (ele._id === clientId) {
-        return ({ ...ele, selected: (!ele.selected) });
-      } else {
-        return ele;
-      }
-    })
-
-    setClients(new_Client);
-  }, [clients])
-
-  const updateClients = useCallback((id, newValue, isDeleted) => {
-    let new_Client;
-
-    if (isDeleted) {
-      new_Client = clients.filter((element) => element._id != id)
-    } else {
-      new_Client = clients.map((element) => {
-        if (id === element._id) {
-          return newValue;
-        } else {
-          return element
-        }
-      })
-
-    }
-
-    setClients(new_Client);
-  }, [clients]);
-
-  const handleSendEmail = async (e) => {
-    e.preventDefault();
-    const token = await getToken();
-    let data = clients.filter((ele) => ele.selected);
-    setDisabled(true);
-    // console.log(data);
-    fetch('http://localhost:5000/email', {
-      method: 'POST',
-      body: JSON.stringify({
-        data
-      }),
-      headers: {
-        authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      }
-    }).then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error('Network Error')
-      }
-    }).then((data) => {
-      console.log(data);
-      setStatus(null, false);
-      alert('Success');
-    }).catch((error) => {
-      alert(error.message);
-    }).finally(() => setDisabled(false));
-  }
-
+export default function HomePage() {
   return (
-    <>
-      {
-        loading ?
-          <div className="flex justify-center items-center w-[100%] h-[100%]">
-            <LoadingSpinner />
-          </div>
-          :
-          (<main className="flex flex-row flex-wrap">
+    <div className="bg-gray-100 min-h-screen flex flex-col">
+      {/* Main Content Section */}
+      <main className="container mx-auto p-4 flex-grow">
+        {/* Welcome Section */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold mb-4">Welcome to the Client Management App</h1>
+          <p className="mb-4">Log in to manage your clients and send surveys.</p>
+          <a href="#" className="bg-blue-600 text-white px-4 py-2 rounded">Login</a>
+        </div>
 
-            <div className="w-[45%] lg:w-[55%] md:w-[60%] sm:w-[90%] sm:m-auto xsm:w-[98%] xxsm:w-[98%] xsm:m-auto ">
-              <h1 className="text-3xl font-bold text-center">Clients</h1>
+        {/* Client List Section */}
+        <section id="client-list" className="mb-8">
+          <h2 className="text-2xl font-bold mb-4">Clients</h2>
+          <input type="text" placeholder="Search Clients" className="border rounded px-4 py-2 mb-4 w-full" />
+          <table className="min-w-full bg-white">
+            <thead>
+              <tr>
+                <th className="py-2 px-4 border-b">Select</th>
+                <th className="py-2 px-4 border-b">Client Name</th>
+                <th className="py-2 px-4 border-b">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="py-2 px-4 border-b text-center"><input type="checkbox" /></td>
+                <td className="py-2 px-4 border-b">Client A</td>
+                <td className="py-2 px-4 border-b">Responded</td>
+              </tr>
+              <tr>
+                <td className="py-2 px-4 border-b text-center"><input type="checkbox" /></td>
+                <td className="py-2 px-4 border-b">Client B</td>
+                <td className="py-2 px-4 border-b">Not Responded</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
 
-              <div className="flex flex-row justify-between">
-                <div>
-                  <input type="checkbox"
-                    className="ml-2"
-                    onChange={(event) => {
-                      setStatus('', event.target.checked);
-                    }} />
-                  <span className="ml-1">Select All</span>
-                </div>
+        {/* Client Actions Section */}
+        <section id="client-actions" className="mb-8">
+          <h2 className="text-2xl font-bold mb-4">Actions</h2>
+          <button className="bg-blue-600 text-white px-4 py-2 rounded mr-2">Send Email</button>
+          <button className="bg-blue-600 text-white px-4 py-2 rounded">View Responses</button>
+        </section>
 
-                <Button className="bg-blue-500 p-2 mr-2 mb-1 hover:bg-blue-400"
-                  onClick={handleSendEmail}
-                  disabled={disabled}>
-                  Send Email
-                </Button>
-              </div>
+        {/* Status Section */}
+        <section id="status">
+          <h2 className="text-2xl font-bold mb-4">Status Summary</h2>
+          <p>Total Clients: 50</p>
+          <p>Responded: 30</p>
+          <p>Not Responded: 20</p>
+          <button className="bg-blue-600 text-white px-4 py-2 rounded mt-4">Detailed Status View</button>
+        </section>
+      </main>
 
-              <CreateContext.Provider value={updateClients}>
-                <div className="overflow-y-auto h-[75vh] overflow-x-hidden">
-                  {clients.map((ele, idx) =>
-                    <UserCardComponent
-                      firstName={ele.firstName}
-                      lastName={ele.lastName}
-                      key={ele._id}
-                      email={ele.email}
-                      contact={ele.contact}
-                      id={ele._id}
-                      selected={ele.selected}
-                      setStatus={setStatus}
-                    />)}
-                </div>
-              </CreateContext.Provider>
-
-            </div>
-
-            <div className="flex justify-center items-center grow">
-              <RadarChartComponent />
-            </div>
-
-          </main>
-          )
-      }
-    </>
-  );
+      {/* Footer Section */}
+      <footer className="bg-gray-800 text-white p-4 text-center">
+        <div className="container mx-auto">
+          <a href="#" className="mx-2">Contact Us</a>
+          <a href="#" className="mx-2">Privacy Policy</a>
+          <a href="#" className="mx-2">Support</a>
+        </div>
+      </footer>
+    </div>
+  )
 }

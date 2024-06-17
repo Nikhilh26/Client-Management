@@ -26,7 +26,7 @@ export default function Header() {
                             :
                             <div className='flex'>
                                 <Link prefetch={false} href='/status' className='mr-5'>Status</Link>
-                                <Link prefetch={false} href='/add-client' className='mr-8'>Client</Link>
+                                <Link prefetch={false} href='/client' className='mr-8'>Client</Link>
                                 <UserButton afterSignOutUrl='/' />
                             </div>
                     }

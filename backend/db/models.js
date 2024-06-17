@@ -18,7 +18,7 @@ const emailSchema = new mongoose.Schema({
         type: String,
         enum: ['delivered', 'failed'],
     }
-});
+}, { strict: false });
 
 const Client = mongoose.model('Client', clientSchema);
 const Email = mongoose.model('Email', emailSchema);

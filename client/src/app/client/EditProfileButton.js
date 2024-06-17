@@ -11,9 +11,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useAuth } from "@clerk/nextjs"
-// import { useRouter } from 'next/navigation'
 import { useState } from "react"
-import { useCreateContext } from "@/app/page";
+import { useCreateContext } from "./page";
 
 export default function EditProfileButton({ firstName, email, contact, lastName, id }) {
     const { getToken } = useAuth();
@@ -51,10 +50,12 @@ export default function EditProfileButton({ firstName, email, contact, lastName,
             if (typeof (data.success) === "undefined")
                 return alert('Something went wrong at server');
 
+            console.log(data.success);
             if (!data.success) {
                 if (data.message) alert(data.message);
                 else alert('Server Error');
             } else {
+                alert('Success');
                 updateClients(id, data.updatedClient, false);
             }
         }).finally(() => {
@@ -68,7 +69,7 @@ export default function EditProfileButton({ firstName, email, contact, lastName,
         e.preventDefault();
         const token = await getToken();
         setLoading(true);
-        fetch(`https://client-management-zz6h.onrender.com/clients/${id}`, {
+        fetch(`http://localhost:5000/clients/${id}`, {
             method: 'DELETE',
             headers: {
                 authorization: `Bearer ${token}`,
@@ -90,12 +91,12 @@ export default function EditProfileButton({ firstName, email, contact, lastName,
                 if (data.message) alert(data.message);
                 else alert('Server Error');
             } else {
+                alert('Success');
                 updateClients(id, data.deletedClient, true);
             }
 
         }).finally(() => {
             setLoading(false)
-            // router.push('/')
         })
     }
 
@@ -104,8 +105,8 @@ export default function EditProfileButton({ firstName, email, contact, lastName,
             <DialogTrigger asChild>
                 <Button variant="outline">Edit</Button>
             </DialogTrigger>
-
-            <DialogContent className={`sm:max-w-[425px] ${loading ? 'pointer-events-none' : ''}`}>
+            {/* The props passed below are as string this to avoid warning in console*/}
+            <DialogContent className={`sm:max-w-[425px] ${loading ? 'pointer-events-none' : ''}`} loading={loading ? "true" : "false"}>
 
                 <DialogHeader>
                     <DialogTitle>Edit profile</DialogTitle>
@@ -168,7 +169,9 @@ export default function EditProfileButton({ firstName, email, contact, lastName,
                 <DialogFooter>
                     <Button
                         className="min-w-[100%]"
-                        onClick={handleOnClickUpdate}>
+                        onClick={handleOnClickUpdate}
+                        disabled={loading}
+                    >
                         Save changes
                     </Button>
                 </DialogFooter>
@@ -176,7 +179,9 @@ export default function EditProfileButton({ firstName, email, contact, lastName,
                 <DialogFooter>
                     <Button
                         className="bg-red-600 hover:bg-red-800 min-w-[100%]"
-                        onClick={handleOnClickDelete}>
+                        onClick={handleOnClickDelete}
+                        disabled={loading}
+                    >
                         Delete
                     </Button>
                 </DialogFooter>

@@ -24,6 +24,9 @@ export default function Page() {
     const { getToken } = useAuth();
 
     const handleOnSubmit = async () => {
+        if (!userId) {
+            return alert('No token Found');
+        }
 
         const token = await getToken();
         setLoading(true);

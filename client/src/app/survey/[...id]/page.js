@@ -68,8 +68,8 @@ export default function SurveyComponent({ params }) {
 
     const surveyComplete = useCallback((survey) => {
         const numericResponses = [];
-
-        Object.keys(survey.data).forEach((question, index) => {
+        console.log(survey.data);
+        Object.keys(survey.data).forEach((question, _) => {
             numericResponses.push(responseMapping[survey.data[question]]);
         });
 
@@ -109,7 +109,7 @@ export default function SurveyComponent({ params }) {
                             </div>
                         </div>
                         : error ?
-                            <h1>Something went Wrong</h1>
+                            <h1 className='text-center'>Something Went wrong . Please Try again later and make sure URL is unchanged</h1>
                             : repondedBefore ? <h1>Already Responded Before</h1> : <Survey model={survey}></Survey>
             }
         </>

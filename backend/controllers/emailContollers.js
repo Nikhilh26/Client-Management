@@ -9,7 +9,7 @@ const sendSurveyEmail = async (req, res) => {
 
         let tempStorage = req.body.data.map((ele) => {
             return {
-                userId, // Assuming userId is in the request body
+                userId,
                 clientId: ele._id,
                 sentAt: epochTime,
                 replied: false,
@@ -18,7 +18,6 @@ const sendSurveyEmail = async (req, res) => {
         });
 
         const response = await Email.insertMany(tempStorage)
-        //console.log(response);
 
         // send email logic handle error also -> update delivery status accordingly
         return res.status(200).json({
@@ -133,11 +132,13 @@ const getSurveyStatus = async (req, res) => {
         ])
         // to be extracted to another method
         const combinedEmails = [...unrepliedEmails, ...recentEmails];
-
+        // console.log(unrepliedEmails);
+        // console.log(recentEmails);
         const uniqueEmailsMap = new Map();
 
         combinedEmails.forEach(email => {
             if (!uniqueEmailsMap.has(email._id.toString())) {
+                // console.log(email);
                 uniqueEmailsMap.set(email._id.toString(), email);
             }
         });
@@ -146,19 +147,20 @@ const getSurveyStatus = async (req, res) => {
         uniqueEmailsMap.forEach((value, key) => {
             const time = convertEpochToReadableDate(value.sentAt);
             let Sent = value.deliveryStatus;
-            const id = value._id;
+            const id = value._id.toString();
             const status = value.replied ? "Responded" : "Has not responded";
 
             Sent = Sent + " on " + time;
 
-
-            if (typeof (value.clientId.email) !== "undefined") {
+            if (value.clientId && typeof (value.clientId.email) !== "undefined") {
                 respPayload.push({ Sent, email: value.clientId.email, id, status })
-            } else {
+            } else if (typeof (value.email) !== "undefined") {
                 respPayload.push({ Sent, email: value.email, id, status });
+            } else {
+                console.log('Email not found');
             }
         })
-
+        console.log(respPayload);
         res.status(200).json({
             success: true,
             respPayload

@@ -1,5 +1,5 @@
 import EditProfileButton from "./EditProfileButton"
-import { Button } from "./ui/button"
+import { Button } from "../../components/ui/button"
 
 export default function UserCardComponent({ firstName, lastName, email, contact, id, selected, setStatus }) {
     return (
