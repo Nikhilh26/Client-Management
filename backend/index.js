@@ -18,7 +18,6 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 
-
 app.use('/clients', clientRouter);
 app.use('/email', emailRouter);
 // PORT activation
@@ -26,37 +25,3 @@ const PORT = process.env.PORT;
 app.listen(PORT, (port, err) => {
     console.log("Server Live ", PORT);
 })
-
-// app.get('/test', async (req, res) => {
-//     try {
-//         const id = req.body.id;
-//         const response = await Email.deleteMany({});
-//         console.log(response);
-//         return res.json({
-//             success: true
-//         })
-//     } catch (error) {
-//         console.log(error);
-//         return res.json({
-//             success: false
-//         })
-//     }
-// })
-// try {
-    //     const emails = await Email.find({ deliveryStatus: "sent" });
-    
-    //     await Promise.all(emails.map(async (element) => {
-        //         element.deliveryStatus = "delivered"
-        //         await element.save()
-        //     }))
-        
-        //     console.log('All documents updated successfully');
-        //     return res.status(200).json({
-            //         success: true
-//     })
-// } catch (error) {
-    //     console.error('Error updating documents:', error);
-    //     return res.status(501).json({
-        //         success: false
-        //     })
-        // }
