@@ -19,7 +19,7 @@ export default function HomePage() {
             to manage your clients and send surveys.
           </p>
           {!userId && (
-            <a href="#" className="bg-blue-600 text-white px-4 py-2 rounded">Login</a>
+            <Link href="/sign-in" className="bg-blue-600 text-white px-4 py-2 rounded">Login</Link>
           )}
         </div>
 
