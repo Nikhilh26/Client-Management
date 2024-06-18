@@ -99,6 +99,14 @@ const getSurveyStatus = async (req, res) => {
         const maxSentAtEmail = await Email.findOne({ userId })
             .sort({ sentAt: -1 })
             .limit(1);
+
+        if (!maxSentAtEmail) {
+            res.status(200).json({
+                success: true,
+                respPayload: []
+            })
+        }
+
         const maxValue = maxSentAtEmail.sentAt;
 
         const recentEmails = await Email.aggregate([

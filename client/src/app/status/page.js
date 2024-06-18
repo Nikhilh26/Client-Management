@@ -37,7 +37,9 @@ export default async function page() {
 
     return (
         <div className="container mx-auto pt-3">
-            <DataTable columns={columns} data={data} />
+            {
+                data.length ? <h1>No records found to show</h1> : <DataTable columns={columns} data={data} />
+            }
         </div>
     )
 }
