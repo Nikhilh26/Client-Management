@@ -13,6 +13,7 @@ const sendSurveyEmail = async (req, res) => {
                 clientId: ele._id,
                 sentAt: epochTime,
                 replied: false,
+                deliveryStatus: "delivered"
                 // responses will be added later
             };
         });
@@ -101,7 +102,7 @@ const getSurveyStatus = async (req, res) => {
             .limit(1);
 
         if (!maxSentAtEmail) {
-            res.status(200).json({
+            return res.status(200).json({
                 success: true,
                 respPayload: []
             })
@@ -141,7 +142,7 @@ const getSurveyStatus = async (req, res) => {
         // to be extracted to another method
         const combinedEmails = [...unrepliedEmails, ...recentEmails];
         const uniqueEmailsMap = new Map();
-
+        console.log(combinedEmails);
         combinedEmails.forEach(email => {
             if (!uniqueEmailsMap.has(email._id.toString())) {
                 uniqueEmailsMap.set(email._id.toString(), email);
@@ -151,7 +152,7 @@ const getSurveyStatus = async (req, res) => {
         const respPayload = [];
         uniqueEmailsMap.forEach((value, key) => {
             const time = convertEpochToReadableDate(value.sentAt);
-            let Sent = value.deliveryStatus;
+            let Sent = value.deliveryStatus || "delivered";
             const id = value._id.toString();
             const status = value.replied ? "Responded" : "Has not responded";
 

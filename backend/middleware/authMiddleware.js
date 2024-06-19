@@ -2,7 +2,6 @@ const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
 dotenv.config();
 const publicKey = process.env.PEM_KEY.replace(/\\n/gm, '\n')
-// console.log(publicKey);
 
 const validateToken = async (req, res, next) => {
 
@@ -22,7 +21,7 @@ const validateToken = async (req, res, next) => {
                 });
             }
             // console.log(req.body);
-            console.log(decoded);
+            // console.log(decoded);
             req.userId = decoded.sub;
             next();
         })

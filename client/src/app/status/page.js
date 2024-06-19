@@ -29,7 +29,7 @@ async function getData() {
 }
 
 export default async function page() {
-    const data = await getData()
+    const data = await getData();
 
     if (typeof (data) === "string") {
         return <h1>Something went wrong while fetching data</h1>
@@ -38,7 +38,7 @@ export default async function page() {
     return (
         <div className="container mx-auto pt-3">
             {
-                data.length ? <h1>No records found to show</h1> : <DataTable columns={columns} data={data} />
+                data.length === 0 ? <h1>No records found to show</h1> : <DataTable columns={columns} data={data} />
             }
         </div>
     )
